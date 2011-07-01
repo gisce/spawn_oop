@@ -1,0 +1,34 @@
+Spawn Open Object Processes
+===========================
+
+Spawns OpenERP instances for functions that consumes a lot of cpu.
+
+
+Example
+=======
+
+from spawn_oop import spawn
+
+from tools import config
+
+
+class ResParner(osv.osv):
+    """Inherit class from res.partner.
+    """
+    _inherit = 'res.parnter'
+
+
+    @spawn(config['port'])
+    def consumes_lot_of_cpu(self, cursor, uid, ids, context=None):
+        """Some hard function.
+        """
+        y = 0
+        for x in range(0, 10000000000):
+            y += x
+        return y
+
+ResPartner()
+
+When ResPartner.consumes_lot_of_cpu() is called, another OpenERP instance is 
+started, then via xmlrpc we call consumes_lot_of_cpu() in that new instance,
+so the main openerp process doesn't get overloaded.
