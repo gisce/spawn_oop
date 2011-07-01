@@ -7,7 +7,7 @@ import sys
 import psutil
 from ooop import OOOP, Manager
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 def spawn(port=8069):
