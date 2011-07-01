@@ -1,0 +1,7 @@
+dist
+build
+.project
+.pydevproject
+.settings
+*.pyc
+*.swp
