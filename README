@@ -24,10 +24,10 @@ from spawn_oop import spawn
 from tools import config
 
 
-class ResParner(osv.osv):
+class ResPartner(osv.osv):
     """Inherit class from res.partner.
     """
-    _inherit = 'res.parnter'
+    _inherit = 'res.partner'
 
 
     @spawn(config['port'])
