@@ -9,7 +9,7 @@ from ooop import OOOP, Manager
 
 import ir_cron
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 def spawn(port=8069):
     """Spawn decorator.
