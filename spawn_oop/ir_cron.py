@@ -11,7 +11,7 @@ class IrCron(osv.osv):
     _inherit = 'ir.cron'
 
     def _poolJobs(self, db_name, check=False):
-        """Check if is a spawnded process.
+        """Check if we are a spawned process.
         """
         if not os.getenv('SPAWNED', False):
             super(IrCron, self)._poolJobs(db_name, check)
