@@ -7,8 +7,9 @@ import sys
 import psutil
 from ooop import OOOP, Manager
 
-__version__ = '0.1.1'
+import ir_cron
 
+__version__ = '0.2.0'
 
 def spawn(port=8069):
     """Spawn decorator.
@@ -41,7 +42,6 @@ def spawn(port=8069):
                 obj = Manager(osv_object._name, O)
                 method = f.__name__
                 newargs = args[3:]
-                res = None
                 res = getattr(obj, method)(*newargs)
                 for child in po.get_children():
                     child.kill()
