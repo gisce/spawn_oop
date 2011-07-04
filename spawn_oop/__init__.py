@@ -26,7 +26,8 @@ def spawn(port=8069):
                 env = os.environ.copy()
                 env['SPAWNED'] = '1'
                 command = sys.argv[:]
-                command += ['--port=0', '--no-netrpc', '--update=False']
+                command += ['--port=0', '--no-netrpc', '--update=False',
+                            '--database=%s' % cursor.dbname]
                 child_port = port
                 p = psutil.Popen(command, env=env)
                 po = psutil.Process(p.pid)
