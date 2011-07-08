@@ -11,7 +11,7 @@ from ooop import OOOP, Manager
 import ir_cron
 import netsvc
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 def spawn(port=8069):
     """Spawn decorator.
