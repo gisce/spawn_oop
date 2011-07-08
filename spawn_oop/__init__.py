@@ -11,7 +11,7 @@ from ooop import OOOP, Manager
 import ir_cron
 import netsvc
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 def spawn(port=8069):
     """Spawn decorator.
@@ -31,7 +31,8 @@ def spawn(port=8069):
                 command = sys.argv[:]
                 command += ['--port=0', '--no-netrpc', '--update=False',
                             '--database=%s' % cursor.dbname,
-                            '--logfile=%s' % os.devnull]
+                            '--logfile=%s' % os.devnull,
+                            '--pidfile=False']
                 child_port = port
                 start = datetime.now()
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Spawned new '
