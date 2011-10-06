@@ -4,8 +4,9 @@
 import os
 
 from osv import osv
+from base.ir.ir_cron import ir_cron
 
-class IrCron(osv.osv):
+class IrCron(ir_cron, osv.osv):
     """Check that ir.cron isn't started on child process.
     """
     _inherit = 'ir.cron'
