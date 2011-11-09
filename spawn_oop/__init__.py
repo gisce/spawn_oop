@@ -10,6 +10,7 @@ from ooop import OOOP, Manager
 
 import ir_cron
 import netsvc
+from tools import config
 
 __version__ = '0.3.2'
 
@@ -41,9 +42,9 @@ def spawn(port=8069):
                 po = psutil.Process(p.pid)
                 while (child_port == port):
                     for connection in po.get_connections():
-                        if connection.status == 'LISTEN':
+                        if (connection.status == 'LISTEN'
+                                and not connection.remote_address):
                             child_port = connection.local_address[1]
-                            break
                 startup = datetime.now() - start
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Server '
                                      'started in %s. PID: %s. Listening on %s.'
@@ -51,8 +52,11 @@ def spawn(port=8069):
                 user = user_obj.browse(cursor, uid, uid).login
                 pwd = user_obj.browse(cursor, uid, uid).password
                 start = datetime.now()
+                uri = 'http://localhost'
+                if config['secure']:
+                    uri = 'https://localhost'
                 O = OOOP(dbname=cursor.dbname, port=child_port, user=user,
-                         pwd=pwd)
+                         pwd=pwd, uri=uri)
                 obj = Manager(osv_object._name, O)
                 method = f.__name__
                 newargs = args[3:]
