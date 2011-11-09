@@ -41,9 +41,9 @@ def spawn(port=8069):
                 po = psutil.Process(p.pid)
                 while (child_port == port):
                     for connection in po.get_connections():
-                        if connection.status == 'LISTEN':
+                        if (connection.status == 'LISTEN'
+                                and not connection.remote_address):
                             child_port = connection.local_address[1]
-                            break
                 startup = datetime.now() - start
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Server '
                                      'started in %s. PID: %s. Listening on %s.'
