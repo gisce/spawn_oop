@@ -12,7 +12,7 @@ import ir_cron
 import netsvc
 from tools import config
 
-__version__ = '0.3.2'
+__version__ = '0.4.0'
 
 def spawn(port=8069):
     """Spawn decorator.
