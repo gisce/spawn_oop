@@ -2,7 +2,9 @@
 """OpenObject Process Spawner.
 """
 import os
+import socket
 import sys
+import time
 from datetime import datetime
 
 import psutil
@@ -22,7 +24,12 @@ def spawn(port=8069):
             if not os.getenv('SPAWNED', False):
                 logger = netsvc.Logger()
                 # self, cursor, uid, *args
-                osv_object = args[0]            
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.bind(('127.0.0.1', 0))
+                child_port = sock.getsockname()[1]
+                sock.listen(1)
+                sock.shutdown(socket.SHUT_RDWR)
+                osv_object = args[0]
                 cursor = args[1]
                 uid = args[2]
                 user_obj = osv_object.pool.get('res.users')
@@ -30,31 +37,35 @@ def spawn(port=8069):
                 env = os.environ.copy()
                 env['SPAWNED'] = '1'
                 command = sys.argv[:]
-                command += ['--port=0', '--no-netrpc', '--update=False',
+                command += ['--port=%i' % child_port, '--no-netrpc',
+                            '--update=False',
                             '--database=%s' % cursor.dbname,
                             '--logfile=%s' % os.devnull,
-                            '--pidfile=False']
-                child_port = port
+                            '--pidfile=%s' % os.devnull]
+
                 start = datetime.now()
-                logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Spawned new '
-                                     'process: %s' % ' '.join(command))
+                logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Spawned '
+                                     'new process: %s' % ' '.join(command))
                 p = psutil.Popen(command, env=env)
-                po = psutil.Process(p.pid)
-                while (child_port == port):
-                    for connection in po.get_connections():
-                        if (connection.status == 'LISTEN'
-                                and not connection.remote_address):
-                            child_port = connection.local_address[1]
+                user = user_obj.browse(cursor, uid, uid).login
+                pwd = user_obj.browse(cursor, uid, uid).password
+                uri = 'http://localhost'
+                if config['secure']:
+                    uri = 'https://localhost'
+                is_listen = False
+                while not is_listen:
+                    try:
+                        OOOP(dbname=cursor.dbname, port=child_port, user=user,
+                             pwd=pwd, uri=uri)
+                        is_listen = True
+                    except:
+                        time.sleep(0.1)
+                        is_listen = False
                 startup = datetime.now() - start
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Server '
                                      'started in %s. PID: %s. Listening on %s.'
                                      % (startup, p.pid, child_port))
-                user = user_obj.browse(cursor, uid, uid).login
-                pwd = user_obj.browse(cursor, uid, uid).password
                 start = datetime.now()
-                uri = 'http://localhost'
-                if config['secure']:
-                    uri = 'https://localhost'
                 O = OOOP(dbname=cursor.dbname, port=child_port, user=user,
                          pwd=pwd, uri=uri)
                 obj = Manager(osv_object._name, O)
@@ -66,6 +77,7 @@ def spawn(port=8069):
 
                 res = getattr(obj, method)(*newargs)
                 duration = datetime.now() - start
+                po = psutil.Process(p.pid)
                 for child in po.get_children():
                     child.kill()
                 po.kill()
