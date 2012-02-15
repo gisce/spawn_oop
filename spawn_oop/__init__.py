@@ -5,6 +5,7 @@ import os
 import socket
 import sys
 import time
+import tempfile
 from datetime import datetime
 
 import psutil
@@ -40,7 +41,7 @@ def spawn(port=8069):
                 command += ['--port=%i' % child_port, '--no-netrpc',
                             '--update=False',
                             '--database=%s' % cursor.dbname,
-                            '--logfile=%s' % os.devnull,
+                            '--logfile=%s' % tempfile.mkstemp()[1],
                             '--pidfile=%s' % os.devnull]
 
                 start = datetime.now()
