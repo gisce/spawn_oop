@@ -15,7 +15,9 @@ from ooop import OOOP, Manager
 
 import ir_cron
 import netsvc
+import pooler
 from tools import config
+from tools.translate import _
 from osv.osv import except_osv
 
 __version__ = '0.3.2'
@@ -59,8 +61,10 @@ class spawn(object):
                                                    SpawnProc(-1, 0, 0))
                 try:
                     if psutil.Process(spawn_proc.pid) and self.uniq:
+                        if isinstance(args[-1], dict):
+                            context = args[-1]
                         raise except_osv("Error",
-                            "Already running pid: %s by user: %s at: %s"
+                            _("Already running pid: %s by user: %s at: %s")
                             % (spawn_proc.pid, spawn_proc.user,
                                spawn_proc.startup)
                         )
