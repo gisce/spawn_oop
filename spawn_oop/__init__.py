@@ -38,6 +38,7 @@ class spawn(object):
     def __init__(self, *args, **kwargs):
         self.uniq = kwargs.get('uniq', False)
         self.n_args = int(kwargs.get('n_args', -1))
+        self.link = kwargs.get('link', False)
 
     def __call__(self, f):
         def f_spawned(*args, **kwargs):
@@ -49,8 +50,10 @@ class spawn(object):
                 uid = args[2]
                 if self.n_args < 0:
                     self.n_args = len(args)
+                if not self.link:
+                    self.link = f.__name__
                 hash_instance = compute_hash_instance(
-                    cursor.dbname, osv_object, f.__name__, args[3:self.n_args]
+                    cursor.dbname, osv_object, self.link, args[3:self.n_args]
                 )
                 spawn_proc = RUNNING_INSTANCES.get(hash_instance,
                                                    SpawnProc(-1, 0, 0))
