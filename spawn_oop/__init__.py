@@ -9,6 +9,7 @@ import tempfile
 from datetime import datetime
 from hashlib import sha1
 from collections import namedtuple
+from multiprocessing import Lock
 
 import psutil
 from ooop import OOOP, Manager
@@ -37,6 +38,8 @@ class spawn(object):
     """Spawn decorator.
     """
 
+    hash_lock = Lock()
+
     def __init__(self, *args, **kwargs):
         self.uniq = kwargs.get('uniq', False)
         self.n_args = int(kwargs.get('n_args', -1))
@@ -45,6 +48,7 @@ class spawn(object):
     def __call__(self, f):
         def f_spawned(*args, **kwargs):
             if not os.getenv('SPAWNED', False):
+                spawn.hash_lock.acquire()
                 logger = netsvc.Logger()
                 # self, cursor, uid, *args
                 osv_object = args[0]
@@ -63,8 +67,9 @@ class spawn(object):
                     if psutil.Process(spawn_proc.pid) and self.uniq:
                         if isinstance(args[-1], dict):
                             context = args[-1]
+                        spawn.hash_lock.release()
                         raise except_osv("Error",
-                            _("Already running pid: %s by user: %s at: %s")
+                            _(u"Already running pid: %s by user: %s at: %s")
                             % (spawn_proc.pid, spawn_proc.user,
                                spawn_proc.startup)
                         )
@@ -114,6 +119,7 @@ class spawn(object):
                     'Hash instance: %s ' % (startup, p.pid, child_port,
                                             hash_instance)
                 )
+                spawn.hash_lock.release()
                 start = datetime.now()
                 O = OOOP(dbname=cursor.dbname, port=child_port, user=user,
                          pwd=pwd, uri=uri)
