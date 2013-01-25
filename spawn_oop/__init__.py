@@ -12,7 +12,6 @@ from collections import namedtuple
 from multiprocessing import Lock
 
 import psutil
-from psutil.signal import SIGKILL
 from ooop import OOOP, Manager
 
 import ir_cron
@@ -142,7 +141,7 @@ class spawn(object):
                         child.kill()
                         child.wait(timeout=5)
                     except psutil.TimeoutExpired:
-                        child.send_signal(SIGKILL)
+                        child.send_signal(psutil.signal.SIGKILL)
                 po.kill()
                 po.wait()
                 if self.uniq:
