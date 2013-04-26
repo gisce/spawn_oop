@@ -2,11 +2,9 @@
 """IrCron modification.
 """
 import os
-
 from osv import osv
-from base.ir.ir_cron import ir_cron
 
-class IrCron(ir_cron, osv.osv):
+class IrCron(osv.osv):
     """Check that ir.cron isn't started on child process.
     """
     _inherit = 'ir.cron'
