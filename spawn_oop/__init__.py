@@ -85,6 +85,8 @@ class spawn(object):
                 env = os.environ.copy()
                 env['SPAWNED'] = '1'
                 command = sys.argv[:]
+                command[0] = os.path.join(config['root_path'],
+                                          'openerp-server.py')
                 command += ['--port=%i' % child_port, '--no-netrpc',
                             '--update=False',
                             '--database=%s' % cursor.dbname,
