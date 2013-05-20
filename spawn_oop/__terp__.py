@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "spawn_oop",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "depends": ["base"],
     "author": "GISCE",
     "category": "Base",
