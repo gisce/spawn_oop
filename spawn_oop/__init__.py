@@ -62,7 +62,7 @@ class spawn(object):
                     cursor.dbname, osv_object, self.link, args[3:self.n_args]
                 )
                 spawn_proc = RUNNING_INSTANCES.get(hash_instance,
-                                                   SpawnProc(-1, 0, 0))
+                                                   SpawnProc(0, 0, 0))
                 try:
                     if psutil.Process(spawn_proc.pid) and self.uniq:
                         if isinstance(args[-1], dict):
