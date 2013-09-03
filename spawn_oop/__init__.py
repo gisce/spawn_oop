@@ -92,6 +92,16 @@ class spawn(object):
                             '--database=%s' % cursor.dbname,
                             '--logfile=%s' % tempfile.mkstemp()[1],
                             '--pidfile=%s' % os.devnull]
+                # Try to check if we have a conf file
+                conf_found = [x for x in command if x.startswith('--conf=')]
+                # If we don't found a conf file try to check if exists in
+                # os env.
+                # This is usefull spawning openerp instances from process that
+                # aren't openerp instances. As a OORQ
+                if not conf_found:
+                    conf_path = os.getenv('OPENERP_CONF', False)
+                    if conf_path:
+                        command += ['--conf=%s' % os.getenv('OPENERP_CONF')]
 
                 start = datetime.now()
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Spawned '
