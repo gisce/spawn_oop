@@ -104,13 +104,19 @@ class spawn(object):
                 if config['secure']:
                     uri = 'https://localhost'
                 is_listen = False
+                timeout = int(os.getenv('SPAWN_OOP_TIMEOUT', 20))
                 while not is_listen:
+                    if timeout <= 0:
+                        raise Exception(
+                            _('Error timeout starting spawned instance.')
+                        )
                     try:
                         OOOP(dbname=cursor.dbname, port=child_port, user=user,
                              pwd=pwd, uri=uri)
                         is_listen = True
                     except:
                         time.sleep(0.1)
+                        timeout -= 0.1
                         is_listen = False
                 startup = datetime.now() - start
                 if self.uniq:

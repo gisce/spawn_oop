@@ -1,13 +1,13 @@
 # Translation of OpenERP Server.
 # This file contains the translation of the following modules:
-#	* spawn_oop
+# 	* spawn_oop
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 5.0.14\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2012-09-24 15:05:57+0000\n"
-"PO-Revision-Date: 2012-09-24 17:19+0100\n"
+"POT-Creation-Date: 2013-09-03 11:22:59+0000\n"
+"PO-Revision-Date: 2013-09-03 13:27+0100\n"
 "Last-Translator: Eduard Carreras i Nadal <ecarreras@gisce.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,10 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: spawn_oop
-#: code:addons/spawn_oop/__init__.py:0
+#: code:addons/spawn_oop/__init__.py:72
 #, python-format
 msgid "Already running pid: %s by user: %s at: %s"
 msgstr "El procés (pid: %s) ja està en marxa. Engegat per l'usuari: %s a %s"
+
+#. module: spawn_oop
+#: code:addons/spawn_oop/__init__.py:121
+#, python-format
+msgid "Error timeout starting spawned instance."
+msgstr "Temps d'espera esgotat al iniciar la instància."
 
 #. module: spawn_oop
 #: model:ir.module.module,description:spawn_oop.module_meta_information
