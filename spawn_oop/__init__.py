@@ -21,7 +21,7 @@ from tools import config
 from tools.translate import _
 from osv.osv import except_osv
 
-__version__ = '0.8.1'
+__version__ = '0.9.0'
 
 RUNNING_INSTANCES = {}
 
