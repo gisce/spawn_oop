@@ -117,6 +117,8 @@ class spawn(object):
                 timeout = int(os.getenv('SPAWN_OOP_TIMEOUT', 20))
                 while not is_listen:
                     if timeout <= 0:
+                        if isinstance(args[-1], dict):
+                            context = args[-1]
                         raise Exception(
                             _('Error timeout starting spawned instance.')
                         )
