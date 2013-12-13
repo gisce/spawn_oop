@@ -99,9 +99,9 @@ class spawn(object):
                 # This is usefull spawning openerp instances from process that
                 # aren't openerp instances. As a OORQ
                 if not conf_found:
-                    conf_path = os.getenv('OPENERP_CONF', False)
+                    conf_path = os.getenv('OPENERP_SERVER', False)
                     if conf_path:
-                        command += ['--conf=%s' % os.getenv('OPENERP_CONF')]
+                        command += ['--conf=%s' % os.getenv('OPENERP_SERVER')]
 
                 start = datetime.now()
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO, 'Spawned '
