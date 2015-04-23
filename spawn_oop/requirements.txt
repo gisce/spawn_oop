@@ -1,1 +1,2 @@
 psutil<0.8.0
+https://github.com/gisce/ooop/archive/xmlrpc_transaction.zip
