@@ -12,7 +12,7 @@ from collections import namedtuple
 from multiprocessing import Lock
 
 import psutil
-from ooop import OOOP, Manager
+from erppeek import Client
 
 import ir_cron
 import netsvc
@@ -113,6 +113,7 @@ class spawn(object):
                 uri = 'http://localhost'
                 if config['secure']:
                     uri = 'https://localhost'
+                uri += ':%s' % child_port
                 is_listen = False
                 timeout = int(os.getenv('SPAWN_OOP_TIMEOUT', 20))
                 while not is_listen:
@@ -123,8 +124,8 @@ class spawn(object):
                             _('Error timeout starting spawned instance.')
                         )
                     try:
-                        OOOP(dbname=cursor.dbname, port=child_port, user=user,
-                             pwd=pwd, uri=uri)
+                        Client(server=uri, db=cursor.dbname, user=user,
+                               password=pwd)
                         is_listen = True
                     except:
                         time.sleep(0.1)
@@ -141,9 +142,9 @@ class spawn(object):
                 )
                 spawn.hash_lock.release()
                 start = datetime.now()
-                O = OOOP(dbname=cursor.dbname, port=child_port, user=user,
-                         pwd=pwd, uri=uri)
-                obj = Manager(osv_object._name, O)
+                c = Client(server=uri, db=cursor.dbname, user=user,
+                               password=pwd)
+                obj = c.model(osv_object._name)
                 method = f.__name__
                 newargs = args[3:]
                 logger.notifyChannel('spawn_oop', netsvc.LOG_INFO,
