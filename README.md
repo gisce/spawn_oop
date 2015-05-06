@@ -9,7 +9,7 @@ You can lock calls to one instance only by `uniq` param.
 Tested on OpenERP 5.0.X
 
  * psutil
- * OOOP
+ * Erppeek
 
 # Example
 
