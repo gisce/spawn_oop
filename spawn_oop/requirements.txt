@@ -1,2 +1,2 @@
-psutil<0.8.0
+psutil<0.7
 erppeek
