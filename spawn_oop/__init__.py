@@ -45,6 +45,16 @@ class spawn(object):
         self.n_args = int(kwargs.get('n_args', -1))
         self.link = kwargs.get('link', False)
 
+    @staticmethod
+    def get_uri(child_port):
+        interface = config.get('interface', 'localhost')
+        if config['secure']:
+            uri = 'https://{0}'.format(interface)
+        else:
+            uri = 'http://{0}'.format(interface)
+        uri += ':%s' % child_port
+        return uri
+
     def __call__(self, f):
         def f_spawned(*args, **kwargs):
             if not os.getenv('SPAWNED', False):
