@@ -120,10 +120,7 @@ class spawn(object):
                 user = user_obj.browse(cursor, uid, uid).login
                 name = user_obj.browse(cursor, uid, uid).name
                 pwd = user_obj.browse(cursor, uid, uid).password
-                uri = 'http://localhost'
-                if config['secure']:
-                    uri = 'https://localhost'
-                uri += ':%s' % child_port
+                uri = self.get_uri(child_port)
                 is_listen = False
                 timeout = int(os.getenv('SPAWN_OOP_TIMEOUT', 20))
                 while not is_listen:
