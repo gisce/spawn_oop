@@ -45,6 +45,16 @@ class spawn(object):
         self.n_args = int(kwargs.get('n_args', -1))
         self.link = kwargs.get('link', False)
 
+    @staticmethod
+    def get_uri(child_port):
+        interface = config.get('interface', 'localhost')
+        if config['secure']:
+            uri = 'https://{0}'.format(interface)
+        else:
+            uri = 'http://{0}'.format(interface)
+        uri += ':%s' % child_port
+        return uri
+
     def __call__(self, f):
         def f_spawned(*args, **kwargs):
             if not os.getenv('SPAWNED', False):
@@ -110,10 +120,7 @@ class spawn(object):
                 user = user_obj.browse(cursor, uid, uid).login
                 name = user_obj.browse(cursor, uid, uid).name
                 pwd = user_obj.browse(cursor, uid, uid).password
-                uri = 'http://localhost'
-                if config['secure']:
-                    uri = 'https://localhost'
-                uri += ':%s' % child_port
+                uri = self.get_uri(child_port)
                 is_listen = False
                 timeout = int(os.getenv('SPAWN_OOP_TIMEOUT', 20))
                 while not is_listen:
