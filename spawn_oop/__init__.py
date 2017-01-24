@@ -48,6 +48,8 @@ class spawn(object):
     @staticmethod
     def get_uri(child_port):
         interface = config.get('interface', 'localhost')
+        if not interface:
+            interface = 'localhost'
         if config['secure']:
             uri = 'https://{0}'.format(interface)
         else:
