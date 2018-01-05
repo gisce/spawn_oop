@@ -1,3 +1,6 @@
+### :warning: This module is replaced with the combination of [OORQ](https://github.com/gisce/oorq) and [Autoworker](https://github.com/gisce/autoworker) :warning:
+
+
 # Spawn Open Object Processes
 
 Spawns OpenERP instances for functions that consumes a lot of cpu.
